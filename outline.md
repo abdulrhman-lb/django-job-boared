@@ -28,3 +28,19 @@ Blog :
 Contact
 Home
 Login
+
+
+
+    JOB
+    JOBVacanvy = models.CharField()
+    JOBSalary = models.DecimalField()
+    JOBCategory = models.ForeignKey()
+    JOBExperience = models.CharField()
+    JOBGender = models.CharField()
+    '''
+
+ 
+ 
+   class Meta:
+        verbose_name = _("job")
+        verbose_name_plural = _("jobs")
