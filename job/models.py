@@ -19,7 +19,7 @@ class job(models.Model):
     job_type = models.CharField(("Job Type"), max_length=15 , choices = JOB_TYPE)
     description = models.TextField(("Description") , max_length=1000)
     published_at = models.DateTimeField(("Puplished At"), auto_now=True)
-    vacanvy = models.IntegerField(("Vacanvy") , default=1)
+    vacancy = models.IntegerField(("Vacancy") , default=1)
     salary = models.IntegerField(("Salary") , default=0)
     experience = models.IntegerField(("Experience") , default=1)
     category = models.ForeignKey("category", verbose_name=(""), on_delete=models.CASCADE)
