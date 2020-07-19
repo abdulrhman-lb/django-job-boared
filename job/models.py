@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils.text import slugify
+from django.contrib.auth.models import User
 
 # Create your models here.
 JOB_TYPE = (
@@ -14,6 +16,7 @@ def image_upload(instance, filename):
 
 
 class job(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     #location
     job_type = models.CharField(("Job Type"), max_length=15 , choices = JOB_TYPE)
@@ -25,6 +28,14 @@ class job(models.Model):
     category = models.ForeignKey("category", verbose_name=(""), on_delete=models.CASCADE)
     image = models.ImageField(("Image"), upload_to=image_upload)
 
+    slug = models.SlugField(blank=True , null=True)
+
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(job , self).save(*args, **kwargs)
+
+        pass
     class Meta:
         verbose_name = ("job")
         verbose_name_plural = ("jobs")
@@ -32,8 +43,6 @@ class job(models.Model):
     def __str__(self):
         return self.title
 
-    def get_absolute_url(self):
-        return reverse("job_detail", kwargs={"pk": self.pk})
 
 
 class category(models.Model):
@@ -46,6 +55,22 @@ class category(models.Model):
     def __str__(self):
         return self.name
 
-    def get_absolute_url(self):
-        return reverse("category_detail", kwargs={"pk": self.pk})
+
+class Apply(models.Model):
+    job = models.ForeignKey(job, on_delete=models.CASCADE)
+    name = models.CharField( max_length=50)
+    email = models.EmailField( max_length=254)
+    website = models.URLField( max_length=200)
+    cv = models.FileField( upload_to='apply/')
+    cover_letter = models.TextField(max_length=500)
+    created_at = models.DateTimeField(("Puplished At"), auto_now=True)
+
+    
+
+    class Meta:
+        verbose_name = ("Apply")
+        verbose_name_plural = ("Applys")
+
+    def __str__(self):
+        return self.name
 
